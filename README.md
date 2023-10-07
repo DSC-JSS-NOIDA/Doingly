@@ -34,7 +34,7 @@
   <img src="https://contrib.rocks/image?repo=DSC-JSS-NOIDA/Doingly" />
 </a>
 
-## Set up and contribute in RapidHire⚙️
+## Set up and contribute in Doingly⚙️
 
 ### 1. Star and Fork this Repository
 ###### You can star ⭐ and fork 🍽️ this repository on GitHub by navigating at the top of this repository.
