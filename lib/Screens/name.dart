@@ -126,17 +126,17 @@ class _NameScreenState extends State<NameScreen> {
                         ),
                       )
                     : GestureDetector(
-                      onTap: () {
+                        onTap: () {
                           _pickImage();
                         },
-                      child: CircleAvatar(
+                        child: CircleAvatar(
                           backgroundColor: Colors.red[100],
                           radius: 100,
                           child: Image.asset(
                             "assets/images/name2.png",
                           ),
                         ),
-                    ),
+                      ),
               ),
               SizedBox(
                 height: 40,
@@ -185,8 +185,11 @@ class _NameScreenState extends State<NameScreen> {
                           "Please tell us your respected name.");
                     } else {
                       setName(name);
-                     
-                      Get.off(() => HomeScreen(), arguments: _selectedImage);
+                      _selectedImage == null
+                          ? Get.snackbar("Going Without An Image?",
+                              "Please Select an Image.")
+                          : Get.off(() => HomeScreen(),
+                              arguments: _selectedImage);
                     }
                   },
                   child: Text("Get Started",
