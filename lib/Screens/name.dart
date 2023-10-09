@@ -129,12 +129,22 @@ class _NameScreenState extends State<NameScreen> {
                         onTap: () {
                           _pickImage();
                         },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.red[100],
-                          radius: 100,
-                          child: Image.asset(
-                            "assets/images/name2.png",
-                          ),
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.red[100],
+                              radius: 100,
+                              child: Image.asset(
+                                "assets/images/name2.png",
+                              ),
+                            ),
+                            CircleAvatar(
+                              backgroundColor: Colors.red[200],
+                              radius: 28,
+                              child: Icon(Icons.add),
+                            )
+                          ],
                         ),
                       ),
               ),
