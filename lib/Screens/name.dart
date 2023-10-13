@@ -96,6 +96,7 @@ class _NameScreenState extends State<NameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xffF9F9F9),
       body: SafeArea(
         child: Padding(
@@ -139,8 +140,8 @@ class _NameScreenState extends State<NameScreen> {
                                 "assets/images/name2.png",
                               ),
                             ),
-                            CircleAvatar(
-                              backgroundColor: Colors.red[200],
+                            const CircleAvatar(
+                              backgroundColor: Color(0xFFFA8484),
                               radius: 28,
                               child: Icon(Icons.add),
                             )
@@ -196,9 +197,39 @@ class _NameScreenState extends State<NameScreen> {
                     } else {
                       setName(name);
                       _selectedImage == null
-                          ? Get.snackbar("Going Without An Image?",
-                              "Please Select an Image.")
-                          : Get.off(() => HomeScreen(),
+                          ? Get.defaultDialog(
+                              backgroundColor: Colors.white,
+                              titleStyle: GoogleFonts.spaceGrotesk(
+                                  fontSize: 24, color: Colors.red),
+                              title: "Alert",
+                              titlePadding: EdgeInsets.only(top: 10),
+                              content: Text(
+                                "Are you sure to go without an Image?",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 12),
+                              confirm: TextButton(
+                                  onPressed: () {
+                                    _selectedImage =
+                                        File("assets/images/name.png");
+                                    Get.off(() => const HomeScreen(),
+                                        arguments: _selectedImage);
+                                    debugPrint("Default Image Selected");
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 16),
+                                  )),
+                              cancel: TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: Text("No",
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 16))))
+                          : Get.off(() => const HomeScreen(),
                               arguments: _selectedImage);
                     }
                   },
