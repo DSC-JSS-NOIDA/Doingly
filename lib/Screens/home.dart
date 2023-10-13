@@ -19,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String greet = "";
   String? name;
-  File image = Get.arguments;
 
   String? images;
   ToDoDataBase db = ToDoDataBase();
@@ -31,38 +30,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late String title;
   late String description;
-  bool isDarkMode = false; // Initially set to false (light mode)
+  bool isDarkMode = false;
 
   DateTime createdTime = DateTime.now();
 
-  Future<String> getName() async {
+  Future<void> getName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? localName = prefs.getString("name");
     setState(() {
-      name = prefs.getString("name") ?? "Anonymous";
+      name = localName ?? "Anonymous";
     });
-
-    return name!;
   }
 
-  Future<String?> getImage() async {
+  Future<void> getImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? localImage = prefs.getString('imagePath');
     setState(() {
-      images = prefs.getString('imagePath');
+      images = localImage;
     });
-
-    return images;
   }
 
   void Greet() {
-    setState(() {
-      if ((DateTime.now().hour) > 4 && ((DateTime.now().hour) <= 12)) {
-        greet = "Good Morning,";
-      } else if ((DateTime.now().hour) > 12 && (DateTime.now().hour) < 17) {
-        greet = "Good Afternoon,";
-      } else {
-        greet = "Good Evening,";
-      }
-    });
+    int hour = DateTime.now().hour;
+    if (hour > 4 && hour <= 12) {
+      greet = "Good Morning,";
+    } else if (hour > 12 && hour < 17) {
+      greet = "Good Afternoon,";
+    } else {
+      greet = "Good Evening,";
+    }
   }
 
   void saveNewTask(String title, String description, DateTime createdTime) {
@@ -120,10 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+void _initializeData() {
     if (_mybox.get("TODOLIST") == null) {
       db.createInitialData();
     } else {
@@ -133,18 +126,23 @@ class _HomeScreenState extends State<HomeScreen> {
     Greet();
     getImage();
     getName();
-    print(greet);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeData();
   }
 
   double FontSize() {
-    double availableWidth = 400.0; // Adjust this based on your available width
-
-    double fontSize = 28; // Default font size
-    if (name.toString().length * fontSize > availableWidth) {
-      fontSize = availableWidth / name.toString().length;
+    double availableWidth = 400.0;
+    double fontSize = 28;
+    if ((name?.length ?? 0) * fontSize > availableWidth) {
+      fontSize = availableWidth / (name?.length ?? 0);
     }
     return fontSize;
   }
+
 
 //  FloatingActionButton(
 //         onPressed: () {
