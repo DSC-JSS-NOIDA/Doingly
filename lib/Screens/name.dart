@@ -180,11 +180,15 @@ class _NameScreenState extends State<NameScreen> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xffFF4655)),
                   onPressed: () {
+                    if(_selectedImage==null){
+                      _selectedImage=File("assets/images/name2.png");
+                    }
                     if (name == "") {
                       Get.snackbar("Going without typing name?",
                           "Please tell us your respected name.");
                     } else {
                       setName(name);
+                      print(_selectedImage);
                      
                       Get.off(() => HomeScreen(), arguments: _selectedImage);
                     }
