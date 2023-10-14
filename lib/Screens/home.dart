@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:date_format/date_format.dart';
 import 'package:dsc_project/Service/HiveDatabase.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -86,10 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void dialogueBox() {
     Get.defaultDialog(
-        titlePadding: EdgeInsets.all(16),
+        titlePadding: const EdgeInsets.all(16),
         onCancel: () {},
         title: "Create",
-        titleStyle: GoogleFonts.spaceGrotesk(color: Colors.black,fontWeight: FontWeight.bold),
+        titleStyle: GoogleFonts.spaceGrotesk(
+            color: Colors.black, fontWeight: FontWeight.bold),
         onConfirm: () {
           saveNewTask(
               _titleController.text, _descriptionController.text, createdTime);
@@ -97,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         textConfirm: "Save",
         buttonColor: Colors.red[400],
-        contentPadding: EdgeInsets.all(20),
+        contentPadding: const EdgeInsets.all(20),
         content: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -105,18 +107,18 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               TextField(
                 controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextField(
                 controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Start typing..'),
+                decoration: const InputDecoration(labelText: 'Start typing..'),
               ),
             ],
           ),
         ));
   }
 
-void _initializeData() {
+  void _initializeData() {
     if (_mybox.get("TODOLIST") == null) {
       db.createInitialData();
     } else {
@@ -134,7 +136,7 @@ void _initializeData() {
     _initializeData();
   }
 
-  double FontSize() {
+  double fontSize() {
     double availableWidth = 400.0;
     double fontSize = 28;
     if ((name?.length ?? 0) * fontSize > availableWidth) {
@@ -142,7 +144,6 @@ void _initializeData() {
     }
     return fontSize;
   }
-
 
 //  FloatingActionButton(
 //         onPressed: () {
@@ -161,34 +162,32 @@ void _initializeData() {
 
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_arrow,
-        buttonSize: Size(60, 60),
-        animationDuration:Duration(milliseconds: 500),
-        direction:SpeedDialDirection.left,
-        childMargin: EdgeInsets.all(10),
-        childrenButtonSize: Size(65, 65),
-        childPadding: EdgeInsets.all(4),
+        buttonSize: const Size(60, 60),
+        animationDuration: const Duration(milliseconds: 500),
+        direction: SpeedDialDirection.left,
+        childMargin: const EdgeInsets.all(10),
+        childrenButtonSize: const Size(65, 65),
+        childPadding: const EdgeInsets.all(4),
         children: [
           SpeedDialChild(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)
-            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             child: const Icon(Icons.add),
             backgroundColor: Colors.red[200],
             onTap: () {
               dialogueBox();
             },
           ),
-         
           SpeedDialChild(
               onTap: () {
-              // setState(() {
-              //           isDarkMode = !isDarkMode;
-              //         });
+                // setState(() {
+                //           isDarkMode = !isDarkMode;
+                //         });
               },
               child: Transform.scale(
                 scale: 0.8,
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     // setState(() {
                     //     isDarkMode = !isDarkMode;
                     //   });
@@ -227,14 +226,12 @@ void _initializeData() {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Text(
-                        greet,
-                        style: GoogleFonts.spaceGrotesk(
-                            fontSize: 23,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
+                    Text(
+                      greet,
+                      style: GoogleFonts.spaceGrotesk(
+                          fontSize: 23,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
                     ),
                     FittedBox(
                       fit: BoxFit
@@ -243,7 +240,7 @@ void _initializeData() {
                         name.toString(),
                         style: GoogleFonts.spaceGrotesk(
                           fontWeight: FontWeight.bold,
-                          fontSize: FontSize(),
+                          fontSize: fontSize(),
                           // Set a default font size
                         ),
                         overflow: TextOverflow
@@ -269,9 +266,9 @@ void _initializeData() {
               style:
                   GoogleFonts.spaceGrotesk(fontSize: 25, color: Colors.black),
             ),
-            Container(
+            const SizedBox(
                 width: 100,
-                child: const Divider(
+                child: Divider(
                   color: Colors.black87,
                 )),
             Expanded(
@@ -281,11 +278,15 @@ void _initializeData() {
                       String? title = db.toDoList[index]["title"];
                       String? description = db.toDoList[index]["description"];
                       DateTime? createdAt = db.toDoList[index]["createdTime"];
+                      final String formattedDate = formatDate(
+                        createdAt!,
+                        [yyyy, '-', mm, '-', dd, ' ', HH, ':', ss, ' ', am],
+                      );
                       return Slidable(
                         direction: Axis.horizontal,
                         endActionPane: ActionPane(
                             extentRatio: 0.6,
-                            motion: StretchMotion(),
+                            motion: const StretchMotion(),
                             children: [
                               SlidableAction(
                                 onPressed: ((context) => {deleteTask(index)}),
@@ -293,7 +294,7 @@ void _initializeData() {
                                 icon: Icons.delete_rounded,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               SlidableAction(
                                 onPressed: (value) {},
                                 backgroundColor: Colors.blue,
@@ -313,7 +314,7 @@ void _initializeData() {
                             print(checkedBox);
                           },
                           child: Card(
-                            margin: EdgeInsets.only(top: 10, bottom: 10),
+                            margin: const EdgeInsets.only(top: 10, bottom: 10),
                             color: Colors.white,
                             elevation: 1,
                             shape: RoundedRectangleBorder(
@@ -321,10 +322,12 @@ void _initializeData() {
                             shadowColor: Colors.red[300],
                             child: ListTile(
                               leading: checkedBox.contains(index)
-                                  ? Icon(Icons.check_box_rounded)
-                                  : Icon(Icons.check_box_outline_blank_rounded),
+                                  ? const Icon(Icons.check_box_rounded)
+                                  : const Icon(
+                                      Icons.check_box_outline_blank_rounded),
                               title: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   title.toString(),
                                   style: GoogleFonts.spaceGrotesk(
@@ -333,7 +336,8 @@ void _initializeData() {
                                 ),
                               ),
                               subtitle: Padding(
-                                padding: EdgeInsets.all(12.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   description.toString(),
                                   style: GoogleFonts.spaceGrotesk(fontSize: 15),
@@ -343,10 +347,11 @@ void _initializeData() {
                               trailing: SizedBox(
                                 width: 60,
                                 child: Text(
-                                  createdAt.toString(),
+                                  formattedDate,
                                   style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
