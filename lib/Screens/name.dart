@@ -96,6 +96,7 @@ class _NameScreenState extends State<NameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color(0xffF9F9F9),
       body: SafeArea(
         child: Padding(
@@ -126,17 +127,27 @@ class _NameScreenState extends State<NameScreen> {
                         ),
                       )
                     : GestureDetector(
-                      onTap: () {
+                        onTap: () {
                           _pickImage();
                         },
-                      child: CircleAvatar(
-                          backgroundColor: Colors.red[100],
-                          radius: 100,
-                          child: Image.asset(
-                            "assets/images/name2.png",
-                          ),
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.red[100],
+                              radius: 100,
+                              child: Image.asset(
+                                "assets/images/name2.png",
+                              ),
+                            ),
+                            const CircleAvatar(
+                              backgroundColor: Color(0xFFFA8484),
+                              radius: 28,
+                              child: Icon(Icons.add),
+                            )
+                          ],
                         ),
-                    ),
+                      ),
               ),
               SizedBox(
                 height: 40,
@@ -185,8 +196,41 @@ class _NameScreenState extends State<NameScreen> {
                           "Please tell us your respected name.");
                     } else {
                       setName(name);
-                     
-                      Get.off(() => HomeScreen(), arguments: _selectedImage);
+                      _selectedImage == null
+                          ? Get.defaultDialog(
+                              backgroundColor: Colors.white,
+                              titleStyle: GoogleFonts.spaceGrotesk(
+                                  fontSize: 24, color: Colors.red),
+                              title: "Alert",
+                              titlePadding: EdgeInsets.only(top: 10),
+                              content: Text(
+                                "Are you sure to go without an Image?",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 12),
+                              confirm: TextButton(
+                                  onPressed: () {
+                                    _selectedImage =
+                                        File("assets/images/name.png");
+                                    Get.off(() => const HomeScreen(),
+                                        arguments: _selectedImage);
+                                    debugPrint("Default Image Selected");
+                                  },
+                                  child: Text(
+                                    "Yes",
+                                    style: TextStyle(
+                                        color: Colors.red, fontSize: 16),
+                                  )),
+                              cancel: TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: Text("No",
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 16))))
+                          : Get.off(() => const HomeScreen(),
+                              arguments: _selectedImage);
                     }
                   },
                   child: Text("Get Started",
